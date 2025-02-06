@@ -1,0 +1,10 @@
+services: 
+  - type: web
+    name: Number Classification API
+    runtime: python
+    plan : free
+    autoDeploy : false
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn -w 4 app:app"
+    ports:
+      - 5000
