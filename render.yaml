@@ -1,13 +1,9 @@
 services:
-  - type: web
-    name: Number Classification API
-    runtime: python
-    plan: free
-    autoDeploy: false
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn app:app"
-    env:
-      PORT: '5000'
-    ports:
-      - 5000
+  - type:web
+    name:fastapi-example
+    runtime:python
+    plan :free
+    autoDeploy:false
+    buildCommand:pip install -r requirements.txt
+    startCommand:uvicorn app:app --host 0.0.0.0 --port $PORT
 
