@@ -1,32 +1,32 @@
-from flask import Flask, request, jsonify
+from fastapi import FastAPI, HTTPException
 from number_classifier import classify_number, is_fun_fact
-from flask_cors import CORS
 from utils import get_fun_fact
-import os
+from pydantic import BaseModel
 
-app = Flask(__name__)
-CORS(app)
+app = FastAPI()
 
-@app.route('/')
-def index():
-    return jsonify({"message": "Welcome to the Number Classification API!"})
+class NumberRequest(BaseModel):
+    number: int
 
-@app.route('/api/classify-number', methods=['GET'])
-def api_classify_number():
-    number = request.args.get('number')
-    # Validate input
-    try:
-        number = int(number)
-    except (ValueError, TypeError):
-        return jsonify({"error": "Invalid input. Provide a valid integer."}), 400
+@app.get("/")
+async def index():
+    return {"message": "Welcome to the Number Classification API!"}
 
-    # Classify number and fetch fun fact
+@app.get("/api/classify-number/")
+async def api_classify_number(number_request: NumberRequest):
+    result = classify_number(number_request.number)
+    result['fun_fact'] = is_fun_fact(number_request.number)
+    result['external_fact'] = get_fun_fact(number_request.number)
+    return result
+
+Alternatively, you can use query parameters
+@app.get("/api/classify-number-alt")
+async def api_classify_number_alt(number: int):
+    if not isinstance(number, int):
+        raise HTTPException(status_code=400, detail="Invalid input. Provide a valid integer.")
     result = classify_number(number)
-    result['fun_fact'] = is_fun_fact(number)  # Ensure is_fun_fact is robust
-    result['external_fact'] = get_fun_fact(number)  # Use get_fun_fact for external API
-    
-    return jsonify(result)
+    result['fun_fact'] = is_fun_fact(number)
+    result['external_fact'] = get_fun_fact(number)
+    return result
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # Use PORT from environment, default to 5000
-    app.run(host="0.0.0.0", port=port, debug=False)  # Disable debug for production
+
