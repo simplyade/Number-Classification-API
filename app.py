@@ -3,6 +3,7 @@ from number_classifier import classify_number, is_fun_fact
 from flask_cors import CORS
 from utils import get_fun_fact
 import time
+import os
 
 app = Flask(__name__)
 CORS(app)
