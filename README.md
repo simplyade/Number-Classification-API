@@ -1,13 +1,13 @@
-Hng_backend_api
+Number Classification API
 
 A Flask API that classifies numbers and provides fun facts about them.
 git clone <repository_url>
-cd Hng_backend_api
+cd project_directory
 Installation
 
  1.   Clone the repository:
  git clone <repository_url>
- cd Hng_backend_api
+ cd project_directory
  2. Install dependencies:
  pip install -r requirements.txt
  
@@ -15,12 +15,11 @@ Installation
  Running the API Locally
  Using Flask Development Server
 
- flask run --host=0.0.0.0 --port=5000
+ flask run --host=0.0.0.0 --port=8000
 
-Using Gunicorn (Recommended for Deployment):
+Using uvicorn (Recommended for Deployment):
 
-gunicorn -w 4 -b 192.168.107.50:5000 app:app
-
+uvicorn app:app --host 0.0.0.0 --port 8000
 
 API Endpoint
 Classify a Number
@@ -29,7 +28,7 @@ Classify a Number
    - Query Parameter: number=<integer>
    - Example Request:
 
-curl "http://192.168.107.50:5000/api/classify-number?number=371"
+curl "http://0.0.0.0:8000/api/classify-number/?number=371"
 
 Response:
 json
@@ -48,6 +47,6 @@ Deployment on Render
 
     - Connect the repository to Render.
 
-    - Add a Gunicorn Start Command in Render settings:
-    gunicorn -w 4 -b 0.0.0.0:5000 app:app
+    - Add a uvicorn Start Command in Render settings:
+    uvicorn app:app --host 0.0.0.0 --port 8000
 
