@@ -1,10 +1,10 @@
-services: 
+services:
   - type: web
     name: Number Classification API
     runtime: python
-    plan : free
-    autoDeploy : false
+    plan: free
+    autoDeploy: false
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "flask-run"
+    startCommand: "python -m flask run"
     ports:
       - 5000
