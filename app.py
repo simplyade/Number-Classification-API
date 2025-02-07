@@ -19,14 +19,5 @@ async def api_classify_number(number_request: NumberRequest):
     result['external_fact'] = get_fun_fact(number_request.number)
     return result
 
-Alternatively, you can use query parameters
-@app.get("/api/classify-number-alt")
-async def api_classify_number_alt(number: int):
-    if not isinstance(number, int):
-        raise HTTPException(status_code=400, detail="Invalid input. Provide a valid integer.")
-    result = classify_number(number)
-    result['fun_fact'] = is_fun_fact(number)
-    result['external_fact'] = get_fun_fact(number)
-    return result
 
 
