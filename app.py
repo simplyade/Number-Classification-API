@@ -7,6 +7,10 @@ import os
 app = Flask(__name__)
 CORS(app)
 
+@app.route('/')
+def index():
+    return jsonify({"message": "Welcome to the Number Classification API!"})
+
 @app.route('/api/classify-number', methods=['GET'])
 def api_classify_number():
     number = request.args.get('number')
