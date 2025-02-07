@@ -5,6 +5,9 @@ services:
     plan: free
     autoDeploy: false
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "python -m flask run"
+    startCommand: "python app.py"
+    env:
+      PORT: '10000'
     ports:
-      - 5000
+      - 10000
+
