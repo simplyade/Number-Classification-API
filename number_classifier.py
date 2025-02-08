@@ -1,5 +1,5 @@
 
-```
+
 """
 Number Classifier Module
 
@@ -104,4 +104,3 @@ def classify_number(number: int) -> dict:
         "properties": properties,
         "digit_sum": digit_sum
     }
-```
