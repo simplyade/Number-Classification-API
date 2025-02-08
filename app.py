@@ -1,4 +1,4 @@
-rom flask import Flask, request, jsonify
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from number_classifier import classify_number, is_armstrong
 import requests
