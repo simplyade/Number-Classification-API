@@ -1,0 +1,69 @@
+
+swagger: "2.0"
+info:
+  title: Number Classification API
+  description: Classify numbers and provide fun facts about them.
+  version: 1.0.0
+host: localhost:5000
+basePath: /
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /api/classify-number/:
+    get:
+      summary: Classify a number and retrieve a fun fact.
+      description: Classify a number and retrieve a fun fact about it.
+      parameters:
+        - name: number
+          in: query
+          type: integer
+          required: true
+          description: The number to classify.
+      responses:
+        200:
+          description: Classification result and fun fact.
+          schema:
+            type: object
+            properties:
+              classification:
+                type: string
+                description: The classification of the number.
+              fun_fact:
+                type: string
+                description: A fun fact about the number.
+        400:
+          description: Invalid input number.
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                description: An error message.
+        500:
+          description: Internal server error.
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                description: An error message.
+
+definitions:
+  ClassificationResult:
+    type: object
+    properties:
+      classification:
+        type: string
+        description: The classification of the number.
+      fun_fact:
+        type: string
+        description: A fun fact about the number.
+      error:
+        type: string
+        description: An error message.
+
+x-swagger-router-controller: "app"
