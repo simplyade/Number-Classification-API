@@ -1,11 +1,12 @@
 
-
+```
 """
 Number Classification API
 
 This API provides endpoints for classifying numbers and retrieving fun facts.
 """
 
+import connexion
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from number_classifier import classify_number, is_armstrong
@@ -13,12 +14,19 @@ import requests
 import logging
 import unittest
 
+Create the Flask app
 app = Flask(__name__)
 CORS(app)
 
 Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+Create the Connexion app
+connexion_app = connexion.App(__name__, specification_dir='swagger/')
+
+Add the API routes
+connexion_app.add_api('swagger.yaml')
 
 def get_fun_fact(number: int) -> str:
     """
@@ -65,46 +73,45 @@ def validate_input(number: str) -> int:
         logger.error(f"Invalid input number: {e}")
         raise ValueError("Invalid input number.") from e
 
-@app.route('/api/classify-number/', methods=['GET'])
-def api_classify_number():
+def classify_number_endpoint(number):
     """
     Classifies a given number and retrieves a fun fact about it.
 
     Args:
-        number (int): The number to classify, passed as a query parameter.
+        number (str): The number to classify, passed as a query parameter.
 
     Returns:
-        jsonify: A JSON response containing the classification result and fun fact.
+        dict: A dictionary containing the classification result and fun fact.
     """
     try:
-        number = request.args.get('number')
-        if number is None:
-            return jsonify({"error": "Missing required query parameter 'number'."}), 400
         number = validate_input(number)
         result = classify_number(number)
         result['fun_fact'] = get_fun_fact(number)
-        return jsonify(result)
+        return result
     except ValueError as e:
-        return jsonify({"error": str(e)}), 400
+        return {"error": str(e)}
     except Exception as e:
         logger.error(f"An unexpected error occurred: {e}")
-        return jsonify({"error": "An unexpected error occurred."}), 500
+        return {"error": "An unexpected error occurred."}
 
+Create a test suite
 class TestNumberClassificationAPI(unittest.TestCase):
     def test_classify_number(self):
-        # Test with a valid input number
+        """
+        Test the classify number endpoint with a valid input number.
+        """
         response = requests.get('http://localhost:5000/api/classify-number/?number=42')
         self.assertEqual(response.status_code, 200)
         self.assertIn('classification', response.json())
         self.assertIn('fun_fact', response.json())
 
-        # Test with an invalid input number
+        """
+        Test the classify number endpoint with an invalid input number.
+        """
         response = requests.get('http://localhost:5000/api/classify-number/?number=abc')
         self.assertEqual(response.status_code, 400)
         self.assertIn('error', response.json())
 
 if __name__ == '__main__':
     unittest.main()
-    app.run(host="0.0.0.0", port=5000)
-
-
+    connexion_app.run(host="0.0.0.0", port=5000)
