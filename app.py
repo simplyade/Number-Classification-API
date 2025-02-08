@@ -1,5 +1,4 @@
 
-```
 """
 Number Classification API
 
