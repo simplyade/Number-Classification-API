@@ -7,3 +7,9 @@ Jinja2==3.1.5
 packaging==24.2
 requests==2.32.3
 Werkzeug==2.0.3
+connexion>=2.14.1
+httpx==0.23.0
+python-json-logger==2.0.2
+
+
+
